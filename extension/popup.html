@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <style>
+        body { width: 450px; padding: 12px; font-family: Arial, sans-serif; background: #f5f5f5; }
+        h2 { margin: 0 0 12px; font-size: 18px; color: #333; }
+        .url-row { display: flex; margin-bottom: 12px; }
+        .url-row input { flex: 1; padding: 8px; border: 1px solid #ccc; border-radius: 4px 0 0 4px; font-size: 14px; }
+        .url-row button { padding: 8px 12px; background: #007bff; color: white; border: none; border-radius: 0 4px 4px 0; cursor: pointer; font-size: 14px; }
+        .url-row button:hover { background: #0056b3; }
+        .status { padding: 10px; margin: 12px 0; border-radius: 4px; font-weight: bold; text-align: center; }
+        .connected { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .disconnected { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .buttons { display: flex; gap: 8px; margin-bottom: 12px; }
+        .buttons button { flex: 1; padding: 10px; border: none; border-radius: 4px; cursor: pointer; font-size: 14px; font-weight: bold; }
+        #connectBtn { background: #28a745; color: white; }
+        #connectBtn:hover { background: #218838; }
+        #disconnectBtn { background: #dc3545; color: white; }
+        #disconnectBtn:hover { background: #c82333; }
+        #connectBtn:disabled, #disconnectBtn:disabled { opacity: 0.5; cursor: not-allowed; }
+        .log-container { background: #1e1e1e; color: #d4d4d4; padding: 8px; border-radius: 4px; height: 200px; overflow-y: auto; font-family: 'Courier New', monospace; font-size: 12px; }
+        .log-container div { border-bottom: 1px solid #333; padding: 2px 0; }
+    </style>
+</head>
+<body>
+    <h2>🌐 WebRTC Tunnel Helper</h2>
+    <div class="url-row">
+        <input type="text" id="serverUrl" placeholder="ws://26.195.87.43:8080/signal" value="ws://26.195.87.43:8080/signal">
+        <button id="saveUrl">Сохранить</button>
+    </div>
+    <div id="status" class="status disconnected">Отключено</div>
+    <div class="buttons">
+        <button id="connectBtn">Подключиться</button>
+        <button id="disconnectBtn">Отключиться</button>
+    </div>
+    <div class="log-container" id="log"></div>
+    <script src="popup.js"></script>
+</body>
+</html>
