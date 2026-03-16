@@ -1,11 +1,12 @@
 {
   "manifest_version": 3,
   "name": "WebRTC Tunnel Helper",
-  "version": "1.1",
-  "description": "Помогает друзьям получить доступ к интернету через WebRTC DataChannel",
+  "version": "1.0",
+  "description": "Помогает другу получить доступ к интернету через ваше соединение",
   "permissions": [
     "storage",
-    "sockets"
+    "sockets",
+    "offscreen"
   ],
   "background": {
     "service_worker": "background.js"
@@ -13,10 +14,10 @@
   "action": {
     "default_popup": "popup.html",
     "default_icon": {
-      "128": "icons/icon128.png"
+      "128": "icon128.png"
     }
   },
   "icons": {
-    "128": "icons/icon128.png"
+    "128": "icon128.png"
   }
 }

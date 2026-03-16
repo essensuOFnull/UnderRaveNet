@@ -8,6 +8,7 @@ import (
 	"log"
 	"net"
 	"net/http"
+	"os"
 	"sync"
 	"time"
 
@@ -59,8 +60,9 @@ func main() {
 
 // serveHome отдаёт простую HTML-страницу (можно сделать информационную)
 func serveHome(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "text/html; charset=utf-8")
-	fmt.Fprint(w, `<h1>WebRTC Tunnel Server</h1><p>Сервер работает. Используйте расширение для подключения.</p>`)
+	data, _ := os.ReadFile("../client/config.json")
+	w.Header().Set("Content-Type", "text/json; charset=utf-8")
+	fmt.Fprint(w, string(data))
 }
 
 // handleSignal обрабатывает WebSocket-сигналинг для WebRTC

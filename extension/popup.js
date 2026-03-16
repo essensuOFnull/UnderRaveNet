@@ -5,11 +5,8 @@ const connectBtn = document.getElementById('connectBtn');
 const disconnectBtn = document.getElementById('disconnectBtn');
 const logDiv = document.getElementById('log');
 
-// Загружаем сохранённый URL
 chrome.storage.local.get('serverUrl', (data) => {
-    if (data.serverUrl) {
-        serverUrlInput.value = data.serverUrl;
-    }
+    if (data.serverUrl) serverUrlInput.value = data.serverUrl;
 });
 
 saveUrlBtn.addEventListener('click', () => {
@@ -26,9 +23,7 @@ function addLog(message) {
     line.textContent = '[' + new Date().toLocaleTimeString() + '] ' + message;
     logDiv.appendChild(line);
     logDiv.scrollTop = logDiv.scrollHeight;
-    while (logDiv.children.length > 100) {
-        logDiv.removeChild(logDiv.firstChild);
-    }
+    while (logDiv.children.length > 100) logDiv.removeChild(logDiv.firstChild);
 }
 
 function updateStatus(connected) {
@@ -46,23 +41,30 @@ function updateStatus(connected) {
 }
 
 connectBtn.addEventListener('click', () => {
-    chrome.runtime.sendMessage({ type: 'connect' });
-    addLog('🔄 Подключение...');
+    const url = serverUrlInput.value.trim();
+    if (url) {
+        // Сохраняем URL в storage
+        chrome.storage.local.set({ serverUrl: url }, () => {
+            // После сохранения отправляем команду подключения
+            chrome.runtime.sendMessage({ target: 'offscreen', type: 'connect' });
+            addLog('🔄 Подключение к ' + url + '...');
+        });
+    } else {
+        addLog('❌ Введите URL сервера');
+    }
 });
 
 disconnectBtn.addEventListener('click', () => {
-    chrome.runtime.sendMessage({ type: 'disconnect' });
+    chrome.runtime.sendMessage({ target: 'offscreen', type: 'disconnect' });
     addLog('🛑 Отключение...');
 });
 
 chrome.runtime.onMessage.addListener((msg) => {
-    if (msg.type === 'status') {
-        updateStatus(msg.connected);
-    } else if (msg.type === 'log') {
-        addLog(msg.text);
-    }
+    if (msg.type === 'log') addLog(msg.text);
+    else if (msg.type === 'status') updateStatus(msg.connected);
 });
 
-chrome.runtime.sendMessage({ type: 'getStatus' }, (response) => {
+// Запрос статуса при открытии
+chrome.runtime.sendMessage({ target: 'offscreen', type: 'getStatus' }, (response) => {
     if (response) updateStatus(response.connected);
 });
